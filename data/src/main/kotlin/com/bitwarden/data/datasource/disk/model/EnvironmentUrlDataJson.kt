@@ -41,6 +41,12 @@ data class EnvironmentUrlDataJson(
 
     @SerialName("events")
     val events: String? = null,
+
+    @SerialName("cloudflareClientId")
+    val cloudflareClientId: String? = null,
+
+    @SerialName("cloudflareClientSecret")
+    val cloudflareClientSecret: String? = null,
 ) {
     /**
      * Returns the [EnvironmentRegion] based on the base domain for the US or EU environments.

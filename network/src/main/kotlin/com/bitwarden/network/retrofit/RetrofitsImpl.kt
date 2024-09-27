@@ -8,6 +8,15 @@ import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.ssl.BitwardenX509ExtendedKeyManager
 import com.bitwarden.network.ssl.CertificateProvider
 import com.bitwarden.network.util.HEADER_KEY_AUTHORIZATION
+import android.util.Log
+import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
+import com.x8bit.bitwarden.data.platform.datasource.network.core.ResultCallAdapterFactory
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptor
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.CloudflareInterceptor
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
+import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_KEY_AUTHORIZATION
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -29,6 +38,8 @@ internal class RetrofitsImpl(
     authTokenManager: AuthTokenManager,
     baseUrlInterceptors: BaseUrlInterceptors,
     headersInterceptor: HeadersInterceptor,
+    cloudflareInterceptor: CloudflareInterceptor,
+    refreshAuthenticator: RefreshAuthenticator,
     json: Json,
     private val certificateProvider: CertificateProvider,
     private val logHttpBody: Boolean = false,
@@ -95,10 +106,11 @@ internal class RetrofitsImpl(
             }
     }
 
-    private val baseOkHttpClient: OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(headersInterceptor)
-        .configureSsl()
-        .build()
+    private val baseOkHttpClient: OkHttpClient =
+        OkHttpClient.Builder()
+            .addInterceptor(cloudflareInterceptor)
+            .addInterceptor(headersInterceptor)
+            .build()
 
     private val authenticatedOkHttpClient: OkHttpClient by lazy {
         baseOkHttpClient

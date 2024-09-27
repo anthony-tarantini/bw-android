@@ -32,6 +32,14 @@ import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.AppStateManagerImpl
+import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.CloudflareInterceptor
+import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
+import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
+import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
+import com.x8bit.bitwarden.data.platform.manager.AppForegroundManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.AssetManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
@@ -247,6 +255,11 @@ object PlatformManagerModule {
     @Singleton
     fun provideNetworkConfigManager(
         authRepository: AuthRepository,
+<<<<<<< HEAD:app/src/main/kotlin/com/x8bit/bitwarden/data/platform/manager/di/PlatformManagerModule.kt
+=======
+        authTokenInterceptor: AuthTokenInterceptor,
+        cloudflareInterceptor: CloudflareInterceptor,
+>>>>>>> 1095f5cb0 (Adding Cloudflare ZeroTrust Access Service Auth functionality):app/src/main/java/com/x8bit/bitwarden/data/platform/manager/di/PlatformManagerModule.kt
         environmentRepository: EnvironmentRepository,
         serverConfigRepository: ServerConfigRepository,
         bitwardenServiceClient: BitwardenServiceClient,
@@ -254,6 +267,11 @@ object PlatformManagerModule {
     ): NetworkConfigManager =
         NetworkConfigManagerImpl(
             authRepository = authRepository,
+<<<<<<< HEAD:app/src/main/kotlin/com/x8bit/bitwarden/data/platform/manager/di/PlatformManagerModule.kt
+=======
+            authTokenInterceptor = authTokenInterceptor,
+            cloudflareInterceptor = cloudflareInterceptor,
+>>>>>>> 1095f5cb0 (Adding Cloudflare ZeroTrust Access Service Auth functionality):app/src/main/java/com/x8bit/bitwarden/data/platform/manager/di/PlatformManagerModule.kt
             environmentRepository = environmentRepository,
             serverConfigRepository = serverConfigRepository,
             bitwardenServiceClient = bitwardenServiceClient,
