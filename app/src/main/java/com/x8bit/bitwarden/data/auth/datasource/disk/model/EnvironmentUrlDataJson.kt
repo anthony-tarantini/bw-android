@@ -36,6 +36,12 @@ data class EnvironmentUrlDataJson(
 
     @SerialName("events")
     val events: String? = null,
+
+    @SerialName("cloudflareClientId")
+    val cloudflareClientId: String? = null,
+
+    @SerialName("cloudflareClientSecret")
+    val cloudflareClientSecret: String? = null,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {

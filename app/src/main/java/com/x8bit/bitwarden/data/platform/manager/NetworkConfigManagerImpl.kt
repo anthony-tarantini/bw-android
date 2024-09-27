@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.CloudflareInterceptor
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
@@ -22,6 +23,7 @@ private const val ENVIRONMENT_DEBOUNCE_TIMEOUT_MS: Long = 500L
 class NetworkConfigManagerImpl(
     authRepository: AuthRepository,
     private val authTokenInterceptor: AuthTokenInterceptor,
+    private val cloudflareInterceptor: CloudflareInterceptor,
     environmentRepository: EnvironmentRepository,
     serverConfigRepository: ServerConfigRepository,
     private val baseUrlInterceptors: BaseUrlInterceptors,
@@ -48,6 +50,8 @@ class NetworkConfigManagerImpl(
             .environmentStateFlow
             .onEach { environment ->
                 baseUrlInterceptors.environment = environment
+                cloudflareInterceptor.cloudflareClientId = environment.environmentUrlData.cloudflareClientId ?: ""
+                cloudflareInterceptor.cloudflareClientSecret = environment.environmentUrlData.cloudflareClientSecret ?: ""
             }
             .debounce(timeoutMillis = ENVIRONMENT_DEBOUNCE_TIMEOUT_MS)
             .onEach { _ ->

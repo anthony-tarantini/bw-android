@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.retrofit
 
 import android.util.Log
-import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.core.ResultCallAdapterFactory
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.CloudflareInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_KEY_AUTHORIZATION
 import kotlinx.serialization.json.Json
@@ -25,6 +25,7 @@ class RetrofitsImpl(
     authTokenInterceptor: AuthTokenInterceptor,
     baseUrlInterceptors: BaseUrlInterceptors,
     headersInterceptor: HeadersInterceptor,
+    cloudflareInterceptor: CloudflareInterceptor,
     refreshAuthenticator: RefreshAuthenticator,
     json: Json,
 ) : Retrofits {
@@ -87,17 +88,14 @@ class RetrofitsImpl(
             .apply {
                 redactHeader(name = HEADER_KEY_AUTHORIZATION)
                 setLevel(
-                    if (BuildConfig.DEBUG) {
                         HttpLoggingInterceptor.Level.BODY
-                    } else {
-                        HttpLoggingInterceptor.Level.NONE
-                    },
                 )
             }
     }
 
     private val baseOkHttpClient: OkHttpClient =
         OkHttpClient.Builder()
+            .addInterceptor(cloudflareInterceptor)
             .addInterceptor(headersInterceptor)
             .build()
 

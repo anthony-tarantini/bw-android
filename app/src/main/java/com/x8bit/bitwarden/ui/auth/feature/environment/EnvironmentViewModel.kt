@@ -43,6 +43,8 @@ class EnvironmentViewModel @Inject constructor(
             apiServerUrl = environmentUrlData.api.orEmpty(),
             identityServerUrl = environmentUrlData.identity.orEmpty(),
             iconsServerUrl = environmentUrlData.icon.orEmpty(),
+            cloudflareClientId = environmentUrlData.cloudflareClientId.orEmpty(),
+            cloudflareClientSecret = environmentUrlData.cloudflareClientSecret.orEmpty(),
             shouldShowErrorDialog = false,
         )
     },
@@ -65,6 +67,8 @@ class EnvironmentViewModel @Inject constructor(
         is EnvironmentAction.ApiServerUrlChange -> handleApiServerUrlChangeAction(action)
         is EnvironmentAction.IdentityServerUrlChange -> handleIdentityServerUrlChangeAction(action)
         is EnvironmentAction.IconsServerUrlChange -> handleIconsServerUrlChangeAction(action)
+        is EnvironmentAction.CloudflareClientIdChange -> handleCloudflareClientIdChangeAction(action)
+        is EnvironmentAction.CloudflareClientSecretChange -> handleCloudflareClientSecretChangeAction(action)
     }
 
     private fun handleCloseClickAction() {
@@ -95,6 +99,8 @@ class EnvironmentViewModel @Inject constructor(
         val updatedApiServerUrl = state.apiServerUrl.prefixHttpsIfNecessaryOrNull()
         val updatedIdentityServerUrl = state.identityServerUrl.prefixHttpsIfNecessaryOrNull()
         val updatedIconsServerUrl = state.iconsServerUrl.prefixHttpsIfNecessaryOrNull()
+        val updatedCloudflareClientId = state.cloudflareClientId
+        val updatedCloudflareClientSecret = state.cloudflareClientSecret
 
         environmentRepository.environment = Environment.SelfHosted(
             environmentUrlData = EnvironmentUrlDataJson(
@@ -103,6 +109,8 @@ class EnvironmentViewModel @Inject constructor(
                 identity = updatedIdentityServerUrl,
                 icon = updatedIconsServerUrl,
                 webVault = updatedWebVaultServerUrl,
+                cloudflareClientId = updatedCloudflareClientId,
+                cloudflareClientSecret = updatedCloudflareClientSecret
             ),
         )
 
@@ -153,6 +161,22 @@ class EnvironmentViewModel @Inject constructor(
             it.copy(iconsServerUrl = action.iconsServerUrl)
         }
     }
+
+    private fun handleCloudflareClientIdChangeAction(
+        action: EnvironmentAction.CloudflareClientIdChange,
+    ) {
+        mutableStateFlow.update {
+            it.copy(cloudflareClientId = action.cloudflareClientId)
+        }
+    }
+
+    private fun handleCloudflareClientSecretChangeAction(
+        action: EnvironmentAction.CloudflareClientSecretChange,
+    ) {
+        mutableStateFlow.update {
+            it.copy(cloudflareClientSecret = action.cloudflareClientSecret)
+        }
+    }
 }
 
 /**
@@ -165,6 +189,8 @@ data class EnvironmentState(
     val apiServerUrl: String,
     val identityServerUrl: String,
     val iconsServerUrl: String,
+    val cloudflareClientId: String,
+    val cloudflareClientSecret: String,
     val shouldShowErrorDialog: Boolean,
 ) : Parcelable
 
@@ -237,6 +263,20 @@ sealed class EnvironmentAction {
      */
     data class IconsServerUrlChange(
         val iconsServerUrl: String,
+    ) : EnvironmentAction()
+
+    /**
+     * Indicates that the Cloudflare Client Id has changed.
+     */
+    data class CloudflareClientIdChange(
+        val cloudflareClientId: String,
+    ) : EnvironmentAction()
+
+    /**
+     * Indicates that the Cloudflare Client Secret has changed.
+     */
+    data class CloudflareClientSecretChange(
+        val cloudflareClientSecret: String,
     ) : EnvironmentAction()
 }
 

@@ -19,6 +19,12 @@ const val HEADER_KEY_AUTHORIZATION: String = "Authorization"
 const val HEADER_KEY_USER_AGENT: String = "User-Agent"
 
 /**
+ * Headers to enable CF Access Service Auth
+ */
+const val CF_ACCESS_CLIENT_ID: String = "CF-Access-Client-Id"
+const val CF_ACCESS_CLIENT_SECRET: String = "CF-Access-Client-Secret"
+
+/**
  * The value used for the 'user-agent' headers.
  */
 @Suppress("MaxLineLength")

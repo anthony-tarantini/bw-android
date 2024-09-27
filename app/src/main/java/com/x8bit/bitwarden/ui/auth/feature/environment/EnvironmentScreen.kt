@@ -200,6 +200,38 @@ fun EnvironmentScreen(
                     .padding(horizontal = 16.dp),
             )
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            BitwardenTextField(
+                label = stringResource(id = R.string.cloudflare_access_client_id),
+                value = state.cloudflareClientId,
+                onValueChange = remember(viewModel) {
+                    { viewModel.trySendAction(EnvironmentAction.CloudflareClientIdChange(it)) }
+                },
+                hint = stringResource(id = R.string.cloudflare_hint),
+                keyboardType = KeyboardType.Text,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("CloudflareClientIdEntry")
+                    .padding(horizontal = 16.dp),
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            BitwardenTextField(
+                label = stringResource(id = R.string.cloudflare_access_client_secret),
+                value = state.cloudflareClientSecret,
+                onValueChange = remember(viewModel) {
+                    { viewModel.trySendAction(EnvironmentAction.CloudflareClientSecretChange(it)) }
+                },
+                hint = stringResource(id = R.string.cloudflare_hint),
+                keyboardType = KeyboardType.Text,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("CloudflareClientSecretEntry")
+                    .padding(horizontal = 16.dp),
+            )
+
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }

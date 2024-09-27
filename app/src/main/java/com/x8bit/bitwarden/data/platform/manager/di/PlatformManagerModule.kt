@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterM
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.CloudflareInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
@@ -186,6 +187,7 @@ object PlatformManagerModule {
     fun provideNetworkConfigManager(
         authRepository: AuthRepository,
         authTokenInterceptor: AuthTokenInterceptor,
+        cloudflareInterceptor: CloudflareInterceptor,
         environmentRepository: EnvironmentRepository,
         serverConfigRepository: ServerConfigRepository,
         baseUrlInterceptors: BaseUrlInterceptors,
@@ -195,6 +197,7 @@ object PlatformManagerModule {
         NetworkConfigManagerImpl(
             authRepository = authRepository,
             authTokenInterceptor = authTokenInterceptor,
+            cloudflareInterceptor = cloudflareInterceptor,
             environmentRepository = environmentRepository,
             serverConfigRepository = serverConfigRepository,
             baseUrlInterceptors = baseUrlInterceptors,

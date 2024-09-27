@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.CloudflareInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.RetrofitsImpl
@@ -66,6 +67,10 @@ object PlatformNetworkModule {
 
     @Provides
     @Singleton
+    fun providesCloudflareInterceptor(): CloudflareInterceptor = CloudflareInterceptor()
+
+    @Provides
+    @Singleton
     fun providesRefreshAuthenticator(): RefreshAuthenticator = RefreshAuthenticator()
 
     @Provides
@@ -74,6 +79,7 @@ object PlatformNetworkModule {
         authTokenInterceptor: AuthTokenInterceptor,
         baseUrlInterceptors: BaseUrlInterceptors,
         headersInterceptor: HeadersInterceptor,
+        cloudflareInterceptor: CloudflareInterceptor,
         refreshAuthenticator: RefreshAuthenticator,
         json: Json,
     ): Retrofits =
@@ -81,6 +87,7 @@ object PlatformNetworkModule {
             authTokenInterceptor = authTokenInterceptor,
             baseUrlInterceptors = baseUrlInterceptors,
             headersInterceptor = headersInterceptor,
+            cloudflareInterceptor = cloudflareInterceptor,
             refreshAuthenticator = refreshAuthenticator,
             json = json,
         )
